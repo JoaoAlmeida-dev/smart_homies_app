@@ -34,23 +34,12 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   List<MenuItem> menuItems = [
     const MenuItem(itemName: 'Weather', itemIcon: Icons.cloud_circle),
     const MenuItem(itemName: 'Item2', itemIcon: Icons.map),
@@ -66,79 +55,66 @@ class _MyHomePageState extends State<MyHomePage> {
     const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
   ];
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     Radius ra = Radius.circular(12);
     return Scaffold(
       body: Stack(
         children: [
           Image.asset(
-            'farmer.jpg',
+            'images/farmer.jpg',
             fit: BoxFit.cover,
-            width: double.infinity,
+            height: double.infinity,
           ),
           SizedBox.expand(
-          child:DraggableScrollableSheet(
-            expand: true,
-            initialChildSize: 0.15,
-            minChildSize: 0.1,
-            maxChildSize: 0.8,
-            builder: (context, controller) =>
-                ClipRRect(
-                  borderRadius: BorderRadius.only(topLeft: ra, topRight: ra),
-                  child: Container(
-                      color: Colors.blue,
-                      child: GridView.count(crossAxisCount: 3,
-                        children: buildItems(menuItems),
-                      ),
-                  ),
-                ),
-          ),
-          ),
+              child: CustomScrollViewContent(menuitems: menuItems, ra: ra)),
         ],
       ),
     );
   }
-
-  List<Widget> buildItems(List<MenuItem> menuitems) {
-    List<Widget> containers=List.generate(
-        menuitems.length,
-            (i)=> Container(
-              child: Column(
-                children:[
-                  Icon(menuitems[i].itemIcon,size: 100,),
-                  Text(menuitems[i].itemName),
-
-                ]
-              ),
-            ),
-    );
-
-    return containers;
-  }
 }
 
-class BottomMenu extends Widget {
+class CustomScrollViewContent extends StatelessWidget {
+  const CustomScrollViewContent(
+      {Key? key, required this.menuitems, required this.ra})
+      : super(key: key);
+
+  final List<MenuItem> menuitems;
+  final Radius ra;
   @override
-  Element createElement() {
-    // TODO: implement createElement
-    throw UnimplementedError();
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.05,
+      maxChildSize: 0.1,
+      minChildSize: 0.005,
+      builder: (context, ScrollController scrollcontroller) => Container(
+        decoration: BoxDecoration(
+            color: Colors.white38,
+            borderRadius: BorderRadius.only(
+              topRight: ra,
+              topLeft: ra,
+            )),
+        child: ListView.builder(
+          //gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          // crossAxisCount: 3,
+          //),
+          controller: scrollcontroller,
+          itemCount: menuitems.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildItem(menuitems, index);
+          },
+        ),
+      ),
+    );
   }
+
+  Widget buildItem(List<MenuItem> menuitems, int index) => Container(
+        child: Column(children: [
+          Icon(
+            menuitems[index].itemIcon,
+            size: 100,
+          ),
+          Text(menuitems[index].itemName),
+        ]),
+      );
 }
