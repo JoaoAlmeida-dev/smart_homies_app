@@ -1,6 +1,13 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:smart_homies_app/menu_item.dart';
+import 'package:smart_homies_app/scroll_view.dart';
+import 'package:smart_homies_app/second_page.dart';
+
+import 'my_app_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,16 +22,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.blueGrey,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -42,79 +41,46 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<MenuItem> menuItems = [
     const MenuItem(itemName: 'Weather', itemIcon: Icons.cloud_circle),
-    const MenuItem(itemName: 'Item2', itemIcon: Icons.map),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
-    const MenuItem(itemName: 'Weather', itemIcon: Icons.cloud_circle),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
-    const MenuItem(itemName: 'Item2', itemIcon: Icons.map),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
-    const MenuItem(itemName: 'Item2', itemIcon: Icons.map),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
-    const MenuItem(itemName: 'Weather', itemIcon: Icons.cloud_circle),
-    const MenuItem(itemName: 'Item3', itemIcon: Icons.access_alarm),
+    const MenuItem(itemName: 'Map', itemIcon: Icons.map),
+    const MenuItem(itemName: 'Alarm', itemIcon: Icons.access_alarm),
   ];
 
   @override
   Widget build(BuildContext context) {
     Radius ra = Radius.circular(12);
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: CustomAppBar(
+        appBar: AppBar(),
+      ),
       body: Stack(
         children: [
-          Image.asset(
+          /*Image.asset(
             'images/farmer.jpg',
             fit: BoxFit.cover,
             height: double.infinity,
+          ),*/
+
+          CustomDraggableScrollView(menuitems: menuItems, ra: ra),
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(
+              heightFactor: 4,
+              child: Text(
+                'Hoje poupou 15 litros de água',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+            ),
           ),
-          SizedBox.expand(
-              child: CustomScrollViewContent(menuitems: menuItems, ra: ra)),
         ],
       ),
     );
   }
 }
 
-class CustomScrollViewContent extends StatelessWidget {
-  const CustomScrollViewContent(
-      {Key? key, required this.menuitems, required this.ra})
-      : super(key: key);
 
-  final List<MenuItem> menuitems;
-  final Radius ra;
-  @override
-  Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.05,
-      maxChildSize: 0.1,
-      minChildSize: 0.005,
-      builder: (context, ScrollController scrollcontroller) => Container(
-        decoration: BoxDecoration(
-            color: Colors.white38,
-            borderRadius: BorderRadius.only(
-              topRight: ra,
-              topLeft: ra,
-            )),
-        child: ListView.builder(
-          //gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          // crossAxisCount: 3,
-          //),
-          controller: scrollcontroller,
-          itemCount: menuitems.length,
-          itemBuilder: (BuildContext context, int index) {
-            return buildItem(menuitems, index);
-          },
-        ),
-      ),
-    );
-  }
 
-  Widget buildItem(List<MenuItem> menuitems, int index) => Container(
-        child: Column(children: [
-          Icon(
-            menuitems[index].itemIcon,
-            size: 100,
-          ),
-          Text(menuitems[index].itemName),
-        ]),
-      );
-}
