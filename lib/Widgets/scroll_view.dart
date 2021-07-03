@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_homies_app/second_page.dart';
+import 'package:smart_homies_app/Screens/second_page.dart';
 
-import 'menu_item.dart';
+import '../Objects/menu_item.dart';
 
 class CustomDraggableScrollView extends StatelessWidget {
   const CustomDraggableScrollView(
