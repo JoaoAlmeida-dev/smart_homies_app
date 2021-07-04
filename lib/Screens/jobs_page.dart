@@ -4,14 +4,14 @@ import 'package:smart_homies_app/Widgets/my_scaffold.dart';
 
 import '../main.dart';
 
-class SensorsPage extends StatelessWidget {
-  const SensorsPage({Key? key}) : super(key: key);
+class JobsPage extends StatelessWidget {
+  const JobsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MyScaffold(
+    return MyScaffold(
       body: Center(
-        child: Text('SensorsPage'),
+          child: Text('JobsPage'),
       ),
     );
   }

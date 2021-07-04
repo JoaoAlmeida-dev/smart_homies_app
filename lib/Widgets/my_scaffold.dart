@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_homies_app/Screens/jobs_page.dart';
 import 'package:smart_homies_app/Screens/map_page.dart';
 import 'package:smart_homies_app/Screens/second_page.dart';
 import 'package:smart_homies_app/Screens/sensors_page.dart';
+import 'package:smart_homies_app/Screens/settings_page.dart';
 import 'package:smart_homies_app/main.dart';
 
 import 'my_app_bar.dart';
@@ -22,6 +24,43 @@ class MyScaffold extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         appBar: AppBar(),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                colors: <Color>[Colors.blue, Colors.white],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              )),
+              child: Center(
+                child: Text('SmatMenu',style: TextStyle(fontSize: 20),),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Jobs'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const JobsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configurações'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: MyBottomAppBar(),
       floatingActionButton: FloatingActionButton(
